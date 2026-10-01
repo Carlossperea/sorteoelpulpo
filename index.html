@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Pulpo - Sorteos Oficiales</title>
+  <style>
+    :root {
+      --bg-dark: #0a0a0c;
+      --card-bg: #141416;
+      --card-border: #222226;
+      --primary-orange: #ff5500;
+      --primary-hover: #e04b00;
+      --text-white: #ffffff;
+      --text-muted: #9e9ea7;
+      --accent-green: #25d366;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      padding-bottom: 90px;
+    }
+
+    /* Header */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px;
+      background-color: rgba(10, 10, 12, 0.95);
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      background-color: #1c1c20;
+      border: 1px solid var(--card-border);
+      color: var(--primary-orange);
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    /* Container */
+    .container {
+      max-width: 550px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .tag-badge {
+      display: inline-block;
+      background-color: rgba(255, 85, 0, 0.15);
+      color: var(--primary-orange);
+      border: 1px solid rgba(255, 85, 0, 0.3);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .hero-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--primary-orange);
+      margin-bottom: 10px;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn-secondary {
+      background-color: #1a1a1e;
+      border: 1px solid var(--card-border);
+      color: var(--text-white);
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Features Box */
+    .features-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: #d1d1d6;
+    }
+
+    .icon-circle {
+      background-color: rgba(37, 211, 102, 0.15);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    /* Prize Card & Galería */
+    .prize-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .prize-image-box {
+      position: relative;
+      width: 100%;
+      height: 320px;
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    .prize-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background-color: var(--primary-orange);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      z-index: 5;
+    }
+
+    .slider-wrapper {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.4s ease-in-out;
+    }
+
+    .prize-img {
+      min-width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Botones de navegación del carrusel */
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slider-btn.prev { left: 10px; }
+    .slider-btn.next { right: 10px; }
+
+    /* Indicadores / Puntos de la Galería */
+    .slider-dots {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 5;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .dot.active {
+      background-color: var(--primary-orange);
+      width: 20px;
+      border-radius: 10px;
+    }
+
+    .prize-info {
+      padding: 16px;
+      text-align: center;
+    }
+
+    .prize-info h2 {
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+    }
+
+    .prize-subtext {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* Chances Selection */
+    .chances-section {
+      margin-bottom: 30px;
+    }
+
+    .section-heading {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+    }
+
+    .chances-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .chance-option {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .chance-option.selected {
+      border-color: var(--primary-orange);
+      background-color: rgba(255, 85, 0, 0.08);
+    }
+
+    .option-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .radio-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #444;
+      display: inline-block;
+      position: relative;
+    }
+
+    .chance-option.selected .radio-dot {
+      border-color: var(--primary-orange);
+      background-color: var(--primary-orange);
+    }
+
+    .chance-count {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .chance-label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .chance-price {
+      color: var(--primary-orange);
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .btn-pay {
+      width: 100%;
+      background-color: var(--primary-orange);
+      color: #fff;
+      border: none;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255, 85, 0, 0.3);
+    }
+
+    .btn-pay:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* Sorteo YouTube Info & Countdown */
+    .sorteo-info-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .sorteo-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--primary-orange);
+      margin-bottom: 10px;
+    }
+
+    .sorteo-date {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .sorteo-time {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+
+    .btn-youtube {
+      display: block;
+      width: 100%;
+      background-color: transparent;
+      border: 1px solid #ff3333;
+      color: #ff4d4d;
+      padding: 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    /* Contador Regresivo */
+    .countdown-container {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 15px 10px;
+    }
+
+    .countdown-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .countdown-timer {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .time-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 55px;
+    }
+
+    .time-number {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary-orange);
+      background-color: #1a1a1e;
+      width: 100%;
+      padding: 6px 0;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+
+    .time-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+    }
+
+    /* Cómo funciona */
+    .how-it-works {
+      margin-bottom: 40px;
+    }
+
+    .how-it-works h2 {
+      font-size: 1.6rem;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .sub-text {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 25px;
+    }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 25px;
+    }
+
+    .step-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px;
+      position: relative;
+    }
+
+    .step-number {
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      background-color: var(--primary-orange);
+      color: #fff;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-icon {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .step-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+
+    .step-card p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.4;
+    }
+
+    .info-notice {
+      background-color: rgba(255, 170, 0, 0.08);
+      border: 1px solid rgba(255, 170, 0, 0.25);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+      color: #e0d0b0;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    /* WhatsApp Widget */
+    .whatsapp-widget {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .whatsapp-bubble {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .whatsapp-btn {
+      background-color: var(--primary-orange);
+      color: #fff;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.6rem;
+      box-shadow: 0 4px 15px rgba(255, 85, 0, 0.4);
+    }
+
+    /* Modal Formulario */
+    #dataModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-box {
+      background: #141416;
+      border: 1px solid #222226;
+      padding: 25px;
+      border-radius: 16px;
+      max-width: 450px;
+      width: 100%;
+      color: #fff;
+    }
+
+    .modal-box h3 {
+      color: #ff5500;
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+    }
+
+    .modal-box p {
+      color: #9e9ea7;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      color: #9e9ea7;
+      margin-bottom: 4px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #0a0a0c;
+      color: #fff;
+      box-sizing: border-box;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn-cancel {
+      flex: 1;
+      background: #222;
+      border: none;
+      color: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      flex: 2;
+      background: #ff5500;
+      border: none;
+      color: #fff;
+      font-weight: bold;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado / Nav -->
+  <header class="navbar">
+    <div class="logo">
+      <span class="logo-icon">🐙</span>
+      <span class="logo-text">El Pulpo</span>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn" title="Ganadores">🏆</button>
+      <button class="nav-btn" title="Mis Números">🎟</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Banner Principal -->
+    <section class="hero">
+      <div class="tag-badge">🎁 ¡Participá en nuestro sorteo!</div>
+      <h1 class="hero-title">El Pulpo</h1>
+      <p class="hero-subtitle">
+        Con cada compra recibís números automáticos para participar en nuestro gran sorteo. ¡Más compras = más chances de ganar!
+      </p>
+
+      <div class="hero-buttons">
+        <button class="btn-secondary">🎟 Números automáticos</button>
+        <button class="btn-secondary">🏆 Sorteo en vivo</button>
+      </div>
+
+      <!-- Puntos destacados -->
+      <div class="features-card">
+        <div class="feature-item">
+          <span class="icon-circle">✉️</span>
+          <p>Recibís tus números al instante, en orden y por email</p>
+        </div>
+        <div class="feature-item">
+          <span class="icon-circle">📤</span>
+          <p>Subís el comprobante y se aprueba automáticamente</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tarjeta del Premio con Galería -->
+    <section class="prize-card">
+      <div class="prize-image-box">
+        <span class="prize-badge">🎟 Sorteo Moto</span>
+        
+        <!-- Carrusel de imágenes -->
+        <div class="slider-wrapper" id="sliderWrapper">
+          <img src="img/Moto.jpg" alt="Moto Benelli Vista 1" class="prize-img">
+          <img src="img/Moto 2.jpg" alt="Moto Benelli Vista 2" class="prize-img">
+          <img src="img/Moto 3.jpg" alt="Moto Benelli Vista 3" class="prize-img">
+        </div>
+
+        <!-- Botones de navegación -->
+        <button class="slider-btn prev" onclick="moveSlide(-1)">❮</button>
+        <button class="slider-btn next" onclick="moveSlide(1)">❯</button>
+
+        <!-- Indicadores de imagen -->
+        <div class="slider-dots">
+          <span class="dot active" onclick="setSlide(0)"></span>
+          <span class="dot" onclick="setSlide(1)"></span>
+          <span class="dot" onclick="setSlide(2)"></span>
+        </div>
+      </div>
+      
+      <div class="prize-info">
+        <h2>Sorteo Gran Premio Moto Benelli</h2>
+        <p class="prize-subtext">¡Con tu compra participás por el premio principal!</p>
+      </div>
+    </section>
+
+    <!-- Selector de Chances con atributo data-nombre incorporado -->
+    <section class="chances-section">
+      <h3 class="section-heading">SELECCIONÁ TUS CHANCES</h3>
+
+      <div class="chances-grid" id="chancesGrid">
+        <div class="chance-option selected" data-link="https://mpago.la/2Cs1vsm" data-nombre="1 chance ($10.000)" onclick="selectChance(this)">
+          <div class="option-left">
+            <span class="radio-dot"></span>
+            <span class="chance-count">1 chance</span>
+            <span class="chance-label">para el sorteo</span>
+          </div>
+          <div class="chance-price">$10.000</div>
+        </div>
+
+        <div class="chance-option" data-link="https://mpago.la/1JMahmG" data-nombre="2 chances ($15.000)" onclick="selectChance(this)">
+          <div class="option-left">
+            <span class="radio-dot"></span>
+            <span class="chance-count">2 chances</span>
+            <span class="chance-label">para el sorteo</span>
+          </div>
+          <div class="chance-price">$15.000</div>
+        </div>
+
+        <div class="chance-option" data-link="https://mpago.la/1sPtXuW" data-nombre="4 chances ($25.000)" onclick="selectChance(this)">
+          <div class="option-left">
+            <span class="radio-dot"></span>
+            <span class="chance-count">4 chances</span>
+            <span class="chance-label">para el sorteo</span>
+          </div>
+          <div class="chance-price">$25.000</div>
+        </div>
+
+        <div class="chance-option" data-link="https://mpago.la/17gax9u" data-nombre="6 chances ($35.000)" onclick="selectChance(this)">
+          <div class="option-left">
+            <span class="radio-dot"></span>
+            <span class="chance-count">6 chances</span>
+            <span class="chance-label">para el sorteo</span>
+          </div>
+          <div class="chance-price">$35.000</div>
+        </div>
+
+        <div class="chance-option" data-link="https://mpago.la/1uKYnQ3" data-nombre="10 chances ($45.000)" onclick="selectChance(this)">
+          <div class="option-left">
+            <span class="radio-dot"></span>
+            <span class="chance-count">10 chances</span>
+            <span class="chance-label">para el sorteo</span>
+          </div>
+          <div class="chance-price">$45.000</div>
+        </div>
+
+        <div class="chance-option" data-link="https://mpago.la/1wYpLwb" data-nombre="15 chances ($70.000)" onclick="selectChance(this)">
+          <div class="option-left">
+            <span class="radio-dot"></span>
+            <span class="chance-count">15 chances</span>
+            <span class="chance-label">para el sorteo</span>
+          </div>
+          <div class="chance-price">$70.000</div>
+        </div>
+
+        <div class="chance-option" data-link="https://mpago.la/14HEp38" data-nombre="20 chances ($90.000)" onclick="selectChance(this)">
+          <div class="option-left">
+            <span class="radio-dot"></span>
+            <span class="chance-count">20 chances</span>
+            <span class="chance-label">para el sorteo</span>
+          </div>
+          <div class="chance-price">$90.000</div>
+        </div>
+
+        <div class="chance-option" data-link="https://mpago.la/1psuhkW" data-nombre="25 chances ($120.000)" onclick="selectChance(this)">
+          <div class="option-left">
+            <span class="radio-dot"></span>
+            <span class="chance-count">25 chances</span>
+            <span class="chance-label">para el sorteo</span>
+          </div>
+          <div class="chance-price">$120.000</div>
+        </div>
+
+        <div class="chance-option" data-link="https://mpago.la/2myr2Uw" data-nombre="30 chances ($150.000)" onclick="selectChance(this)">
+          <div class="option-left">
+            <span class="radio-dot"></span>
+            <span class="chance-count">30 chances</span>
+            <span class="chance-label">para el sorteo</span>
+          </div>
+          <div class="chance-price">$150.000</div>
+        </div>
+      </div>
+
+      <!-- Botón de Pago que abre el Modal -->
+      <button class="btn-pay" onclick="procesarPago()">Comprar Chances con Mercado Pago</button>
+    </section>
+
+    <!-- Información Fecha de Sorteo, YouTube y Contador Regresivo -->
+    <section class="sorteo-info-card">
+      <div class="sorteo-header">
+        <span class="icon">🎟</span>
+        <h4>Fecha del Sorteo</h4>
+      </div>
+      <div class="sorteo-date">📅 Viernes 30 De Octubre De 2026</div>
+      <div class="sorteo-time">⏰ 22:00 hs</div>
+      <a href="https://youtube.com" target="_blank" class="btn-youtube">
+        ▶ Ver sorteo en vivo por YouTube
+      </a>
+
+      <!-- Contador Regresivo -->
+      <div class="countdown-container">
+        <div class="countdown-title">El sorteo comienza en:</div>
+        <div class="countdown-timer">
+          <div class="time-block">
+            <span class="time-number" id="days">00</span>
+            <span class="time-label">Días</span>
+          </div>
+          <div class="time-block">
+            <span class="time-number" id="hours">00</span>
+            <span class="time-label">Hs</span>
+          </div>
+          <div class="time-block">
+            <span class="time-number" id="minutes">00</span>
+            <span class="time-label">Min</span>
+          </div>
+          <div class="time-block">
+            <span class="time-number" id="seconds">00</span>
+            <span class="time-label">Seg</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección ¿Cómo funciona? -->
+    <section class="how-it-works">
+      <h2>¿Cómo funciona?</h2>
+      <p class="sub-text">Participar es muy fácil, seguí estos simples pasos</p>
+
+      <div class="steps-list">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-icon">🎟</div>
+          <h3>Elegí tus chances</h3>
+          <p>Seleccioná cuántos números querés para el sorteo. Más chances = más probabilidades de ganar.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-icon">💳</div>
+          <h3>Realizá el pago</h3>
+          <p>Completá el checkout y transferí el monto indicado. Subí tu comprobante de pago.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-icon">☑️</div>
+          <h3>Recibí tus números</h3>
+          <p>Una vez confirmado el pago, recibirás automáticamente tus números aleatorios únicos.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <div class="step-icon">🏆</div>
+          <h3>¡Participá del sorteo!</h3>
+          <p>El día del sorteo se eligen los ganadores en vivo por YouTube. ¡Puede ser tu número!</p>
+        </div>
+      </div>
+
+      <div class="info-notice">
+        <span class="notice-icon">💡</span>
+        <p>
+          <strong>Importante:</strong> Cada paquete que comprás te da una cantidad específica de números para el sorteo. Por ejemplo, si comprás el paquete de 5 chances, recibirás 5 números aleatorios únicos. Los números no son correlativos, se asignan de forma aleatoria para mayor transparencia.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal Formulario de Captura de Datos -->
+  <div id="dataModal">
+    <div class="modal-box">
+      <h3>Completa tus datos para el sorteo</h3>
+      <p>Ingresa tus datos para registrar la compra y asignarte tus números.</p>
+
+      <form id="clientForm" onsubmit="confirmarYGuardar(event)">
+        <div class="form-group">
+          <label>Nombre y Apellido *</label>
+          <input type="text" id="clienteNombre" required placeholder="Ej: Juan Pérez">
+        </div>
+
+        <div class="form-group">
+          <label>DNI *</label>
+          <input type="number" id="clienteDNI" required placeholder="Sin puntos">
+        </div>
+
+        <div class="form-group">
+          <label>Correo Electrónico *</label>
+          <input type="email" id="clienteCorreo" required placeholder="ejemplo@gmail.com">
+        </div>
+
+        <div class="form-group">
+          <label>Dirección / Localidad *</label>
+          <input type="text" id="clienteDireccion" required placeholder="Ej: Bañado de Ovanta">
+        </div>
+
+        <div class="form-group">
+          <label>Celular / WhatsApp *</label>
+          <input type="tel" id="clienteCelular" required placeholder="Ej: 3834123456">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+          <button type="submit" id="btnSubmit" class="btn-submit">Ir a Pagar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Widget Flotante de WhatsApp -->
+  <div class="whatsapp-widget">
+    <div class="whatsapp-bubble">¿Necesitás ayuda?</div>
+    <a href="https://wa.me/5493834409693?text=Hola,%20tengo%20una%20consulta%20sobre%20el%20sorteo%20de%20El%20Pulpo" class="whatsapp-btn" target="_blank" aria-label="WhatsApp">
+      💬
+    </a>
+  </div>
+
+  <script>
+    // URL Web App de Google Apps Script
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyheCp0lExuZFANAPhma_rbz8pekMLvVMvzpqZjwzPyge4DbwxNFGKMPSK1Ey31Vumo/exec';
+
+    // Guardar opción inicial seleccionada
+    const inicial = document.querySelector('.chance-option.selected');
+    let linkPagoSeleccionado = inicial.getAttribute('data-link');
+    let comboSeleccionado = inicial.getAttribute('data-nombre');
+
+    // Selección de opciones
+    function selectChance(element) {
+      const opciones = document.querySelectorAll('.chance-option');
+      opciones.forEach(opcion => opcion.classList.remove('selected'));
+
+      element.classList.add('selected');
+      linkPagoSeleccionado = element.getAttribute('data-link');
+      comboSeleccionado = element.getAttribute('data-nombre'); // Guarda ej: "4 chances ($25.000)"
+    }
+
+    // Modal Control & Integración
+    function procesarPago() {
+      if (linkPagoSeleccionado) {
+        document.getElementById('dataModal').style.display = 'flex';
+      } else {
+        alert("Por favor, selecciona una opción de chances.");
+      }
+    }
+
+    function cerrarModal() {
+      document.getElementById('dataModal').style.display = 'none';
+    }
+
+    function confirmarYGuardar(event) {
+      event.preventDefault();
+      
+      const btnSubmit = document.getElementById('btnSubmit');
+      btnSubmit.disabled = true;
+      btnSubmit.innerText = "Guardando...";
+
+      const datosCliente = {
+        nombre: document.getElementById('clienteNombre').value,
+        dni: document.getElementById('clienteDNI').value,
+        correo: document.getElementById('clienteCorreo').value,
+        direccion: document.getElementById('clienteDireccion').value,
+        celular: document.getElementById('clienteCelular').value,
+        linkPago: comboSeleccionado, // Ahora envía el texto descriptivo del combo
+        fecha: new Date().toLocaleString("es-AR")
+      };
+
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datosCliente)
+      })
+      .then(() => {
+        window.location.href = linkPagoSeleccionado;
+      })
+      .catch(error => {
+        console.error("Error al guardar:", error);
+        window.location.href = linkPagoSeleccionado;
+      });
+    }
+
+    // Lógica del Carrusel de la Moto
+    let currentSlide = 0;
+    const totalSlides = 3;
+
+    function updateSlider() {
+      const sliderWrapper = document.getElementById('sliderWrapper');
+      const dots = document.querySelectorAll('.dot');
+
+      if (sliderWrapper) {
+        sliderWrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+      }
+
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+    }
+
+    function moveSlide(direction) {
+      currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
+      updateSlider();
+    }
+
+    function setSlide(index) {
+      currentSlide = index;
+      updateSlider();
+    }
+
+    // Contador Regresivo (Viernes 30 de Octubre de 2026, 22:00 hs)
+    const targetDate = new Date("October 30, 2026 22:00:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        document.querySelector('.countdown-container').innerHTML = "<div style='color: var(--primary-orange); font-weight: bold;'>¡EL SORTEO ESTÁ EN VIVO!</div>";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").innerText = days < 10 ? '0' + days : days;
+      document.getElementById("hours").innerText = hours < 10 ? '0' + hours : hours;
+      document.getElementById("minutes").innerText = minutes < 10 ? '0' + minutes : minutes;
+      document.getElementById("seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+
+</body>
+</html>
